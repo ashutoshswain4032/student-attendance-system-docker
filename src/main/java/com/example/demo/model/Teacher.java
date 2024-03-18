@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 import java.sql.Date;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 
 @Entity

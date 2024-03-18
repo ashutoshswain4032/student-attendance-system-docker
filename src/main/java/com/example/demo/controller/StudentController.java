@@ -24,7 +24,7 @@ import com.example.demo.model.AttendanceAndDate;
 import com.example.demo.model.Student;
 import com.example.demo.model.Teacher;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class StudentController {
@@ -46,7 +46,7 @@ public class StudentController {
 		admin.setUserName("ashutosh4032");
 		admin.setPassword("ashutosh4032");
 		Optional<Admin> byUserName = adminRepo.findByUserName(admin.getUserName());
-		if(!byUserName.isPresent()){
+		if(byUserName.isEmpty()){
 			adminRepo.save(admin);
 		}
 		return "index";

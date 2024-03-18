@@ -16,7 +16,7 @@ import com.example.demo.model.AttendanceAndDate;
 
 import com.example.demo.model.Student;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class AttendanceController {
