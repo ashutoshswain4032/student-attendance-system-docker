@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+
+<title>Teacher Profile</title>
+</head>
+<style>
+body {
+	background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+}
+
+.emp-profile {
+	padding: 3%;
+	margin-top: 3%;
+	margin-bottom: 3%;
+	border-radius: 0.5rem;
+	background: #fff;
+}
+
+.profile-tab label {
+	font-weight: 600;
+}
+
+.profile-tab p {
+	font-weight: 600;
+	color: #0062cc;
+}
+</style>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark "
+		style="background-color: #0f37ff;">
+
+
+
+		<a class="navbar-brand" href="/">Student Attendance System</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+
+				<li class="nav-item active"><a class="nav-link"
+					th:href="@{/view/studentlist}">View Student List<span
+						class="sr-only">(current)</span>
+				</a></li>
+				<li class="nav-item active"><a class="nav-link"
+					th:href="@{/attendance/new}">Take Attendance<span
+						class="sr-only">(current)</span></a></li>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+					role="button" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false"> View Attendance </a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" data-toggle="modal"
+							data-target="#DateAndRollModal">View By Date And Roll</a> <a
+							class="dropdown-item" data-toggle="modal"
+							data-target="#DateOnlyModal">View All by Date</a> <a
+							class="dropdown-item" data-toggle="modal"
+							data-target="#DateBetweenModal">Generate a
+							Report of All</a>
+					</div></li>
+				<li class="nav-item active"><a class="nav-link" th:href="@{/}">Logout<span
+						class="sr-only">(current)</span></a></li>
+
+			</ul>
+
+		</div>
+	</nav>
+
+	<!--Date and Roll -->
+	<div class="modal fade" id="DateAndRollModal" tabindex="-1"
+		role="dialog" aria-labelledby="DateAndRollModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="DateAndRollModalLabel">View
+						Student Attendance</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form th:action="@{/view/attendanceByRoll}" method="get"
+						th:object=${dto}>
+						<div class="form-group">
+							<label for="exampleInputEmail1">Select Roll No.</label> <select
+								required class="custom-select" th:field="*{studentId}">
+								<th:block th:each="std:${std}">
+									<option th:text="${std.studentId}" th:value="${std.studentId}" />
+								</th:block>
+
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Date</label> <input
+								type="date" class="form-control" th:field="*{date}">
+						</div>
+
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- DateOnly -->
+	<div class="modal fade" id="DateOnlyModal" tabindex="-1" role="dialog"
+		aria-labelledby="DateOnlyModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="DateOnlyModalLabel">View Student
+						Attendance</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form th:action="@{/view/attendanceByDate}" method="get"
+						th:object=${date}>
+
+						<div class="form-group">
+							<label for="exampleInputPassword1">Date</label> <input
+								type="date" class="form-control" th:field="*{date}">
+						</div>
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--Generate a report  -->
+	<div class="modal fade" id="DateBetweenModal" tabindex="-1"
+		role="dialog" aria-labelledby="DateBetweenModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="DateBetweenModalLabel">Enter Dates</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form th:action="@{/view/attendanceBetweenDates}" method="get"
+						th:object=${date}>
+
+						<div class="form-group">
+							<label for="exampleInputPassword1">Enter Start Date</label> <input
+								type="date" class="form-control" name="sdate">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Enter End Date</label> <input
+								type="date" class="form-control" name="edate">
+						</div>
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Welcome!</strong> You have logged in successfully.
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<div class="container emp-profile" th:each="teacher: ${teacher}">
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="profile-head">
+					<h5 th:text="${teacher.teacherName}"></h5>
+				</div>
+
+			</div>
+
+		</div>
+		<div class="row">
+
+			<div class="col-md-10">
+				<div class="tab-content profile-tab" id="myTabContent">
+					<div class="tab-pane fade show active" id="home" role="tabpanel"
+						aria-labelledby="home-tab">
+						<div class="row">
+							<div class="col-md-4">
+								<label>User Id</label>
+							</div>
+							<div class="col-md-8">
+								<p th:text="${teacher.teacherId}"></p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<label>Name</label>
+							</div>
+							<div class="col-md-8">
+								<p th:text="${teacher.teacherName}"></p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<label>Email</label>
+							</div>
+							<div class="col-md-8">
+								<p th:text="${teacher.email}"></p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<label>Phone</label>
+							</div>
+							<div class="col-md-8">
+								<p th:text="${teacher.number}"></p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<label>Date of Joining</label>
+							</div>
+							<div class="col-md-8">
+								<p th:text="${teacher.dob}"></p>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>
